@@ -14,7 +14,8 @@
 ![5](https://github.com/min-young417/GameP_Report/assets/122364547/bc321d50-2a34-406a-8a9c-e7c4c1c5d248)
 ## 예제6_슬라이드 바 
 
-![6](https://github.com/min-young417/GameP_Report/assets/122364547/6d4782d5-a3c2-4027-bee2-63d9b7cb068d)
+![6](https://github.com/min-young417/GameP_Report/assets/122364547/dbb5c9b5-c5b1-4ff0-9211-c57283450074)
+
 ## 예제7_블럭 이동
 
 ![7](https://github.com/min-young417/GameP_Report/assets/122364547/f259fa10-c22f-4748-a9a1-a68ae19db2e4)
