@@ -10,26 +10,26 @@ void gotoxy(int x, int y);
 
 int main(void)
 {
-   char *slide="■", key;
-   int x=1, y=1;
-   int h_slide_length, v_slide_length;
-   printf("슬라이드바 표시\n\n");
-   printf("수평 슬라이드바의 길이(최대 70)를 \n");
-   printf("입력하고 Enter>");
-   scanf("%d", &h_slide_length);
-   printf("수직 슬라이드바의 길이(최대 19)를 \n");
-   printf("입력하고 Enter>");
-   scanf("%d", &v_slide_length);
-   system("cls");
+   	char *slide="■", key;
+	int x=1, y=1;
+	int h_slide_length, v_slide_length;
+	printf("슬라이드바 표시\n\n");
+	printf("수평 슬라이드바의 길이(최대 70)를 \n");
+	printf("입력하고 Enter>");
+	scanf("%d", &h_slide_length);
+	printf("수직 슬라이드바의 길이(최대 19)를 \n");
+	printf("입력하고 Enter>");
+	scanf("%d", &v_slide_length);
+	system("cls");
 
-   do
-   {
+	do	
+	{
     draw_vertical_slide(1, y, v_slide_length, slide);
     draw_horizontal_slide(x,v_slide_length+3,h_slide_length,slide);
     key=getch();
     move_arrow_key(key, &x, &y, h_slide_length, v_slide_length);
-   }while(key!=27);
-   return 0;
+	}while(key!=27);
+	return 0;
 }
 
 void draw_rectangle(int c, int r)
@@ -38,11 +38,11 @@ void draw_rectangle(int c, int r)
     unsigned char a=0xa6;
     unsigned char b[7]; 
     for(i=1;i<7;i++)
-   	b[i]=0xa0+i;
+		b[i]=0xa0+i;
 
     printf("%c%c",a, b[3]);
-    for(i=0;i<c;i++)
-  	printf("%c%c", a, b[1]);
+    for(i=0;i<c*2;i++)
+		printf("%c%c", a, b[1]);
     printf("%c%c", a, b[4]);
     printf("\n");
     for(i=0;i<r;i++)
@@ -54,8 +54,8 @@ void draw_rectangle(int c, int r)
 	printf("\n");
     }
     printf("%c%c", a, b[6]);
-    for(i=0;i<c;i++)
-	printf("%c%c", a, b[1]);
+    for(i=0;i<c*2;i++)
+		printf("%c%c", a, b[1]);
     printf("%c%c", a, b[5]);
     printf("\n");
 }
@@ -75,7 +75,7 @@ void draw_horizontal_slide(int x, int y, int length, char *s)
 void draw_vertical_slide(int x, int y, int length, char *s)
 {
 	gotoxy(x, 1);
-	draw_rectangle(1, length);
+	draw_rectangle(2, length);
 	gotoxy(x+2, y+1);
 	printf("%s", s);
 	gotoxy(x+6, length+1);
@@ -109,7 +109,6 @@ void move_arrow_key(char key, int *x1, int *y1, int x_b, int y_b)
 
 void gotoxy(int x, int y)
 {
-   COORD Pos = {x - 1, y - 1};
-   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+	COORD Pos = {x - 1, y - 1};
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
-

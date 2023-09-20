@@ -15,9 +15,9 @@ int inx=0, iny=0;
 
 int main(void)
 {
-	int shape1[3][3]= {0,1,0,
-			       0,1,0,
-			       1,1,1};
+	int shape1[3][3] = {0,1,0,
+						0,1,0,
+						1,1,1};
 	move_control(shape1);
 	return 0;
 }
@@ -120,7 +120,7 @@ void move_shape(int m[][3])
 
 void gotoxy(int x, int y)
 {
-   COORD Pos = {x - 1, y - 1};
-   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+	COORD Pos = {x - 1, y - 1};
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
 

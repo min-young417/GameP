@@ -8,6 +8,6 @@ int main(void)
   scanf("%s", number);
   length=strlen(number);
   for(i=length;i>=0;i--)
-     printf("%c\n", number[i]);
+      printf("%c\n", number[i]);
   return 0;
 }
