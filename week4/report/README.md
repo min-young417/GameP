@@ -27,4 +27,6 @@
 
 
 무승부
+
+
 ![Untitled (6)](https://github.com/min-young417/GameP/assets/122364547/99f7daf1-8a27-480c-911a-f88405d51382)
