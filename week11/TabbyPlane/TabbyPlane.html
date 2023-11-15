@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+    canvas {
+        border:1px solid #d3d3d3;
+        background-color: #f1f1f1;
+    }
+
+    @font-face {
+        font-family:myFirstFont ;
+        src:url(font/kenvector_future.ttf) ;
+    }
+    * { font-family:myFirstFont }
+</style>
+</head>
+<body onload="introGame()">
+<script>
+
+var myBackground, myGamePiece, myScore, title, startBtn_txt, startBtn;
+var myObstacles = [];
+var myStars = [];
+
+function introGame() {
+    myBackground  = new component(480, 270, "images/background.png", 0, 0, "image");
+    title = new component("40px", "myFirstFont", "black", 70, 80, "text");
+    title.text="TAPPY PLANE";
+    myGamePiece = new component(50, 50, "images/planeBlue1.png", 220, 120, "image");
+    startBtn = new component(120, 50, "images/buttonLarge.png", 180, 195, "image");
+    startBtn_txt = new component("20px", "myFirstFont", "black", 200, 225, "text");
+    startBtn_txt.text="START";
+    myGameArea.intro();
+    myGameArea.canvas.addEventListener("click", (event) => {
+        myGameArea.stop();
+        myGameArea.start();
+        startGame();
+    });
+}
+
+function startGame() {
+    myBackground  = new component(480, 270, "images/background.png", 0, 0, "image");
+    myGamePiece = new component(50, 50, "images/planeBlue1.png", 30, 120, "image");
+    myGamePiece.gravity = 0.05;
+    mySound = new sound("audio/drop_003.oog");
+    myMusic = new sound("audio/gametheme.mp3");
+    myMusic.play();
+    myScore = new component("30px", "Consolas", "black", 230, 40, "text");
+    myGameArea.start();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    intro : function() {
+        this.canvas.width = 480;
+        this.canvas.height = 270;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameIntro, 20);
+        this.level = 1;
+    },
+    start : function() {
+        this.frameNo = 0;
+        this.star = 0;
+        clearInterval(this.interval);
+        this.interval = setInterval(updateGameArea, 20);
+        },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    stop : function() {
+        clearInterval(this.interval);
+    }
+}
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    this.score = 0;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
+    this.update = function() {
+        ctx = myGameArea.context;
+        if (this.type == "image") {
+            this.image = new Image();
+            this.image.src = color;
+            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        } else if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.newPos = function() {
+        this.gravitySpeed += this.gravity;
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        this.hitBottom();
+    }
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravitySpeed = 0;
+        }
+    }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x - 10;
+        var myright = this.x + (this.width) - 10;
+        var mytop = this.y - 10;
+        var mybottom = this.y + (this.height) - 10;
+        var otherleft = otherobj.x + 15;
+        var otherright = otherobj.x + (otherobj.width) - 20;
+        var othertop = otherobj.y + 10;
+        var otherbottom = otherobj.y + (otherobj.height) - 10;
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+}
+
+function updateGameIntro() {
+    myGameArea.clear();
+    myBackground.update();
+    title.update();
+    myGamePiece.update();
+    startBtn.update();
+    startBtn_txt.update();
+}
+
+function updateGameArea() {
+    var x, height, gap, minHeight, maxHeight, minGap, maxGap
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            myMusic.stop();
+            mySound.play();
+            myGameArea.stop();
+            endGame();          
+            return;
+        } 
+    }
+    for (i = 0; i < myStars.length; i += 1) {
+        if (myGamePiece.crashWith(myStars[i])) {
+            if (myGameArea.level == 2){
+                myGameArea.star += 2;
+            } else if (myGameArea.level == 3){
+                myGameArea.star += 3;
+            } else {
+                myGameArea.star += 1;
+            }
+            myStars[i].y = 300;
+            myStars[i].update();
+            mySound.play();
+        } 
+    }
+    myGameArea.clear();
+    myGameArea.frameNo += 1;
+    if (everyinterval(180)) {
+        x = myGameArea.canvas.width;
+        minHeight = 100;
+        maxHeight = 130;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        if (everyinterval(360)){
+            myObstacles.push(new component(50, height, "images/rockDown.png", x, 0, "image"));
+        } else {
+            myObstacles.push(new component(50, x - height, "images/rock.png", x, height, "image"));
+        }
+        if(everyinterval(90)) {
+            if (myGameArea.level == 2){
+                myStars.push(new component(30, 30, "images/starSilver.png", x + 100, height, "image"));
+            } else if (myGameArea.level == 3){
+                myStars.push(new component(30, 30, "images/starGold.png", x + 100, height, "image"));
+            } else {
+                myStars.push(new component(30, 30, "images/starBronze.png", x + 100, height, "image"));
+            }
+        }
+    }
+    myBackground.update();
+    for (i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].x += -1;
+        myObstacles[i].update();
+    }
+    for (i = 0; i < myStars.length; i += 1) {
+        myStars[i].x += -1;
+        myStars[i].update();
+    }
+    myScore.text=myGameArea.star;
+    myScore.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
+    if (myGameArea.frameNo < 180 && myGameArea.frameNo > 50){
+        if (myGameArea.level == 3){
+            var t3 = new component("40px", "myFirstFont", "black", 150, 100, "text");
+            t3.text = "LEVEL 3"; t3.update();
+        } else if (myGameArea.level == 2){
+            var t3 = new component("40px", "myFirstFont", "black", 150, 100, "text");
+            t3.text = "LEVEL 2"; t3.update();
+        } else {
+            var t3 = new component("40px", "myFirstFont", "black", 150, 100, "text");
+            t3.text = "LEVEL 1"; t3.update();
+        }
+    }
+}
+
+function updateGameEnd() {
+    myGameArea.clear();
+    myBackground.update();
+}
+
+function restartGame() {
+    myGameArea.clear();
+    myGamePiece.speedX = 0;
+    myGamePiece.speedY = 0;
+    myObstacles = [];
+    myStars = [];
+    myGameArea.frameNo = 0;
+    myGameArea.score = 0;
+    myMusic.play();
+    myGameArea.start();
+}
+
+function endGame() {
+    var score = myGameArea.star;
+    myGameArea.stop();
+    myGameArea.clear();
+    myBackground  = new component(480, 270, "images/background.png", 0, 0, "image");    myBackground.update();
+    var myUI = new component(200, 170, "images/UIbg.png", 140, 50, "image");    myUI.update();
+    var t1 = new component("40px", "myFirstFont", "black", 160, 90, "text");
+    t1.text="SCORE";    t1.update();
+    var t2 = new component("40px", "myFirstFont", "black", 227, 150, "text");
+    t2.text=score;  t2.update();
+    var restartBtn = new component(130, 40, "images/buttonLarge.png", 175, 170, "image");   restartBtn.update();
+    var restartBtn_txt = new component("20px", "myFirstFont", "black", 185, 195, "text");
+    restartBtn_txt.text="RESTART";    restartBtn_txt.update();
+    myGameArea.canvas.addEventListener("click", (event) => {
+        restartGame();
+    });
+}
+
+function settingGame() {
+    myMusic.stop();
+}
+
+function lv1(){
+    myGameArea.level = 1;
+    myGamePiece = new component(50, 50, "images/planeBlue1.png", 30, 120, "image");
+    restartGame();
+}
+
+function lv2(){
+    myGameArea.level = 2;
+    myGamePiece = new component(50, 50, "images/planeGreen1.png", 30, 120, "image");
+    restartGame();
+}
+
+function lv3(){
+    myGameArea.level = 3;
+    myGamePiece = new component(50, 50, "images/planeRed1.png", 30, 120, "image");
+    restartGame();
+}
+
+function everyinterval(n) {
+    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
+function accelerate(n) {
+    myGamePiece.gravity = n;
+}
+
+</script>
+<div style="text-align:right;width:480px;">
+    <button id="sound-button" onclick="settingGame()">MUSIC OFF</button>
+    <button id="lv1-button" onclick="lv1()">LV 1</button>
+    <button id="lv2-button" onclick="lv2()">LV 2</button>
+    <button id="lv3-button" onclick="lv3()">LV 3</button>
+    <button id="restart-button" onclick="restartGame()">RESTART GAME</button>
+    <button id="accelerate-button" onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">JUMP</button>
+</div>
+</html>
