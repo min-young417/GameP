@@ -26,7 +26,7 @@
 
 외계인이 점프하여 친구를 찾아 올라가는 게임
 
-> week15
+> [week15](https://github.com/min-young417/GameP/tree/main/week15)
 
 
 ![image](https://github.com/min-young417/GameP/assets/122364547/1dddc61f-1e61-449c-bf8d-e5a39100db70)
