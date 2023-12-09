@@ -50,6 +50,9 @@ week11 | 프로젝트(Tappy Plane)
 
 week13 | Unity C# Script 입문, 캐릭터 활용
 
+
+week15 | 프로젝트(Jump!! Jump!!)
+
 ## 발표
 - [VSCode에서 github 연동하기](https://github.com/min-young417/GameP/tree/main/%EB%B0%9C%ED%91%9C_VSCode%EC%97%90%EC%84%9CGitHub%EC%97%B0%EB%8F%99)
 - [Unity Tilemap 활용 방법](https://github.com/min-young417/GameP/tree/main/%EB%B0%9C%ED%91%9C_UnityTilemap)
