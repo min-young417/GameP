@@ -6,7 +6,7 @@
 
 방향키로 이동하여 2개의 보물을 찾는 '보물찾기 게임'을 업그레이드 하여 제작한 '지뢰 찾기 게임'
 
-> week6
+> [week6](https://github.com/min-young417/GameP/tree/main/week6)
 
 ![26](https://github.com/min-young417/GameP/assets/122364547/c4ecbbda-de15-49c8-b520-90917eb492d3)
 
@@ -16,10 +16,20 @@
 
 비행기를 조작하여 장애물을 피해 별을 먹어 점수를 올리는 게임
 
-> week11
+> [week11](https://github.com/min-young417/GameP/tree/main/week11)
 
 
 ![image](https://github.com/min-young417/GameP/assets/122364547/a2fb72f1-57be-4e05-a396-c54bf75d2fb8)
+
+### Jump!! Jump!!
+
+
+외계인이 점프하여 친구를 찾아 올라가는 게임
+
+> week15
+
+
+
 
 ## 수업
 week1, week3 | C 코드 분석
